@@ -22,6 +22,10 @@ aptaive-builder/
 
 php -d memory_limit=1G vendor/bin/phpstan analyse
 
+## build
+
+bash bin/release.sh
+
 ## Installation
 
 Add this to your wp-config.php:
