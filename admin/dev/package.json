@@ -1,0 +1,34 @@
+{
+  "name": "dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "wp-scripts start src/index.tsx --output-path=../build",
+    "build": "wp-scripts build src/index.tsx --output-path=../build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/react": "^19.2.9",
+    "@types/react-dom": "^19.2.3",
+    "@types/wordpress__element": "^2.4.1",
+    "@wordpress/api-fetch": "^7.38.0",
+    "@wordpress/components": "^32.0.0",
+    "@wordpress/element": "^6.38.0",
+    "@wordpress/scripts": "^31.3.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "typescript": "^5.9.3",
+    "zustand": "^5.0.10"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@wordpress/media-utils": "^5.38.0"
+  }
+}

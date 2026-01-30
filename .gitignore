@@ -1,0 +1,17 @@
+/vendor/
+# Composer
+/vendor
+/composer.lock
+
+# Node
+/node_modules
+/admin/dev/node_modules
+/admin/dev/dist
+/admin/dev/.cache
+
+# OS
+.DS_Store
+
+# IDE
+.idea
+.vscode

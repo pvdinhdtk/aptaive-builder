@@ -1,0 +1,7 @@
+{
+    "name": "pvdinhdtk/aptaive-builder",
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "php-stubs/wordpress-stubs": "^6.9"
+    }
+}

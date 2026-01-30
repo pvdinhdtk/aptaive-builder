@@ -1,0 +1,156 @@
+#aptaive-admin-root {
+    padding: 16px;
+}
+
+.aptaive-admin-notices {
+    margin-bottom: 16px;
+}
+
+.components-notice__dismiss {
+    align-self: unset;
+}
+
+.components-notice-list .components-notice__content {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.aptaive-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 800px;
+    /* đúng chuẩn spacing WP */
+}
+
+.components-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* đúng chuẩn spacing WP */
+}
+
+.aptaive-image-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.aptaive-image-preview {
+    max-height: 120px;
+    max-width: 120px;
+    display: block;
+}
+
+.aptaive-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    max-width: 250px;
+    border: 1px dashed #c3c4c7;
+    border-radius: 4px;
+    color: #787c82;
+    font-size: 13px;
+    background: #f6f7f7;
+}
+
+.aptaive-image-button {
+    align-self: flex-start;
+    margin-top: 10px;
+    height: 30px;
+    padding: 0 22px;
+}
+
+.aptaive-color-button-group {
+    display: inline-flex;
+    align-items: center;
+    /* ✔ căn giữa dọc */
+    height: 34px;
+    border: 1px solid #c3c4c7;
+    border-radius: 2px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.aptaive-color-swatch {
+    width: 34px;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    border-right: 1px solid #c3c4c7 !important;
+    /* ✔ vách ngăn */
+    cursor: default;
+    background-clip: content-box;
+}
+
+.aptaive-color-button {
+    display: flex;
+    align-items: center;
+    /* ✔ chữ giữa dọc */
+    height: 100%;
+    padding: 0 12px;
+    border: 0;
+    background: transparent;
+    font-size: 13px;
+    line-height: normal;
+    /* ✔ bỏ line-height hack */
+    cursor: pointer;
+    color: #1e1e1e;
+}
+
+.aptaive-color-button:hover {
+    background: #f6f7f7;
+}
+
+.aptaive-color-button-group:focus-within {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+
+.aptaive-layout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.aptaive-layout-card p {
+    margin-bottom: 12px;
+    color: #50575e;
+}
+
+/* Editor layout */
+
+.aptaive-section-card {
+    margin-bottom: 12px;
+    will-change: transform;
+}
+
+.aptaive-section-card.is-dragging {
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
+}
+
+.aptaive-card-hint {
+    color: #2271b1;
+    font-weight: 500;
+}
+
+.aptaive-clickable {
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.aptaive-clickable:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.drag-handle {
+    cursor: grab;
+    color: #9ca3af;
+    margin-right: 5px;
+}
+
+.components-input-control__container button {
+    height: 32px;
+}
