@@ -15,6 +15,7 @@ rsync -av \
   --exclude='stubs' \
   --exclude='vendor' \
   --exclude='node_modules' \
+  --exclude='README-DEV.md' \
   --exclude='admin/dev' \
   --exclude='composer.*' \
   --exclude='phpstan*' \
