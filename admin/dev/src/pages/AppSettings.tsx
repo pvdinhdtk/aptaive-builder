@@ -3,17 +3,33 @@ import {
     Card,
     CardBody,
     CardHeader,
-    Spinner,
-    TextControl,
+    TextControl
 } from '@wordpress/components';
 
+import Skeleton from 'react-loading-skeleton';
 import { ColorField } from '../components/ColorField';
 import { CardImageField } from '../components/ImageField';
 import { useConfigStore } from '../store/configStore';
 
 export default function AppSettings() {
     const { config, updateApp, loading, save } = useConfigStore();
-    if (loading || !config) return <Spinner />;
+    if (loading || !config) {
+        return (
+            <>
+                <div className="aptaive-cards">
+                    <SettingsCardSkeleton title="General" fields={5} />
+                    <SettingsCardSkeleton title="Branding" fields={2} />
+                    <SettingsCardSkeleton title="Colors" fields={4} />
+                </div>
+
+                <Skeleton
+                    height={36}
+                    width={140}
+                    style={{ marginTop: 16 }}
+                />
+            </>
+        );
+    }
 
     const app = config!.app;
 
@@ -130,5 +146,39 @@ export default function AppSettings() {
                 Save Changes
             </Button>
         </>
+    );
+}
+
+function SettingsCardSkeleton({
+    title,
+    fields = 3,
+}: {
+    title: string;
+    fields?: number;
+}) {
+    return (
+        <Card>
+            <CardHeader>
+                <strong>
+                    <Skeleton width={120} height={16} />
+                </strong>
+            </CardHeader>
+
+            <CardBody>
+                {Array.from({ length: fields }).map((_, i) => (
+                    <FieldSkeleton key={i} />
+                ))}
+            </CardBody>
+        </Card>
+    );
+}
+
+
+function FieldSkeleton() {
+    return (
+        <div style={{ marginBottom: 16 }}>
+            <Skeleton height={14} width="30%" style={{ marginBottom: 6 }} />
+            <Skeleton height={32} />
+        </div>
     );
 }

@@ -1,10 +1,10 @@
 import {
     Card,
     CardBody,
-    CardHeader,
-    Spinner,
+    CardHeader
 } from '@wordpress/components';
 
+import Skeleton from 'react-loading-skeleton';
 import { LayoutEditor } from '../layouts/LayoutEditor';
 import { Config } from '../models/config';
 import { useConfigStore } from '../store/configStore';
@@ -38,7 +38,19 @@ function isLayoutKey(
 export default function AppLayouts() {
     const { config, loading } = useConfigStore();
 
-    if (loading || !config) return <Spinner />;
+    if (loading || !config) {
+        return (
+            <div className="aptaive-admin">
+                <h2>App Layouts</h2>
+
+                <div className="aptaive-layout-grid">
+                    {Array.from({ length: 2 }).map((_, i) => (
+                        <LayoutCardSkeleton key={i} />
+                    ))}
+                </div>
+            </div>
+        );
+    }
 
     const params = new URLSearchParams(window.location.search);
     const layoutParam = params.get('layout');
@@ -57,7 +69,7 @@ export default function AppLayouts() {
 
     return (
         <div className="aptaive-admin">
-            <h1>App Layouts</h1>
+            <h2>App Layouts</h2>
 
             <div className="aptaive-layout-grid">
                 {layouts.map((key) => {
@@ -87,5 +99,22 @@ export default function AppLayouts() {
                 })}
             </div>
         </div>
+    );
+}
+
+function LayoutCardSkeleton() {
+    return (
+        <Card className="aptaive-layout-card">
+            <CardHeader>
+                <div style={{ width: '100%' }}>
+                    <Skeleton height={18} width="60%" />
+                </div>
+            </CardHeader>
+
+            <CardBody>
+                <Skeleton count={2} height={14} style={{ marginBottom: 6 }} />
+                <Skeleton width="40%" height={12} />
+            </CardBody>
+        </Card>
     );
 }
