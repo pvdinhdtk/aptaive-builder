@@ -18,7 +18,7 @@
     "@wordpress/api-fetch": "^7.38.0",
     "@wordpress/components": "^32.0.0",
     "@wordpress/element": "^6.38.0",
-    "@wordpress/scripts": "^31.3.0",
+    "@wordpress/scripts": "^27.9.0",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",

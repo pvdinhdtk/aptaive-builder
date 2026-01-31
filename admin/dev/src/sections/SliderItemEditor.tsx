@@ -29,6 +29,18 @@ export function SliderItemEditor({
         <>
             <CardBody>
                 <Flex gap={2} wrap align="flex-start">
+                    <FlexItem
+                        {...dragHandleProps}
+                        style={{
+                            cursor: 'grab',
+                            paddingTop: 28, // canh với label input
+                            userSelect: 'none',
+                        }}
+                        className="drag-handle"
+                    >
+                        ⋮⋮
+                    </FlexItem>
+
                     {/* Icon – RỘNG */}
                     <FlexItem style={{ flexBasis: '360px', flexGrow: 2 }}>
                         <InputControl
@@ -90,6 +102,19 @@ export function SliderItemEditor({
                             }
                         />
                     </FlexItem>
+
+                    {/* Remove */}
+                    {onRemove && (
+                        <FlexItem style={{ paddingTop: 22 }}>
+                            <Button
+                                isDestructive
+                                variant="tertiary"
+                                onClick={onRemove}
+                            >
+                                Xoá
+                            </Button>
+                        </FlexItem>
+                    )}
                 </Flex>
             </CardBody>
         </>

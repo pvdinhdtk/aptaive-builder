@@ -21,7 +21,7 @@ export type EditorSliderItem = EditorBase & SliderItem;
 /* ===== SECTIONS ===== */
 export type EditorSliderSection = EditorBase &
     Omit<SliderSection, "items"> & {
-        items: EditorSliderItem[];
+        items: SliderItem[];
     };
 
 export type EditorCategoryGridSection = EditorBase &

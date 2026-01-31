@@ -1,7 +1,8 @@
 import { BaseControl, TextControl } from "@wordpress/components";
-import { useState } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
 import { TargetType } from "../models/config";
 import { EditorSliderItem, EditorSliderSection } from "../types/ui";
+import { createId } from "../utils/helper";
 import { SliderItemListEditor } from "./SliderItemListEditor";
 
 type Props = {
@@ -18,6 +19,17 @@ function createEmptyItem(): EditorSliderItem {
 }
 
 export function SliderSectionEditor({ section, onChange }: Props) {
+    const [editorItems, setEditorItems] = useState<EditorSliderItem[]>([]);
+
+    useEffect(() => {
+        setEditorItems(
+            (section.items ?? []).map((item) => ({
+                ...item,
+                id: createId(),
+            }))
+        );
+    }, []);
+
     // number -> "a / b"
     const numberToRatio = (value: number, maxDen = 20) => {
         let bestNum = 1;
@@ -99,14 +111,17 @@ export function SliderSectionEditor({ section, onChange }: Props) {
 
             <BaseControl label="Items">
                 <SliderItemListEditor
-                    items={section.items ?? []}
+                    items={editorItems}
                     createItem={createEmptyItem}
-                    onChange={(items) =>
+                    onChange={(items) => {
+                        setEditorItems(items);
+
+                        // 👇 STRIP ID TRƯỚC KHI LƯU
                         onChange({
                             ...section,
-                            items,
-                        })
-                    }
+                            items: items.map(({ id, ...rest }) => rest),
+                        });
+                    }}
                 />
             </BaseControl>
         </>
