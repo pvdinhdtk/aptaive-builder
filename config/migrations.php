@@ -8,76 +8,106 @@ function aptaive_on_activate()
 {
     $config = get_option(APTAIVE_CONFIG_OPTION);
 
-    // Chưa có config → tạo mới theo schema hiện tại
     if (!$config || !is_array($config)) {
         update_option(APTAIVE_CONFIG_OPTION, aptaive_default_config());
         return;
     }
 
-    $currentVersion = $config['schemaVersion'] ?? 1;
-
-    if ($currentVersion < APTAIVE_SCHEMA_VERSION) {
-        $config = aptaive_migrate_config($config, $currentVersion);
-        update_option(APTAIVE_CONFIG_OPTION, $config);
-    }
+    // Hien tai chua co migrate vi chua dua len production.
+    // Neu sau nay tang schemaVersion, co the khoi phuc lai flow migrate theo mau cu:
+    //
+    // $current_version = (int) ($config['schemaVersion'] ?? 1);
+    // if ($current_version < APTAIVE_SCHEMA_VERSION) {
+    //     $config = aptaive_migrate_config($config, $current_version);
+    // }
+    //
+    // function aptaive_migrate_config(array $config, int $from_version): array
+    // {
+    //     $version = $from_version;
+    //
+    //     while ($version < APTAIVE_SCHEMA_VERSION) {
+    //         switch ($version) {
+    //             case 1:
+    //                 $config = aptaive_migrate_v1_to_v2($config);
+    //                 $version = 2;
+    //                 break;
+    //             case 2:
+    //                 $config = aptaive_migrate_v2_to_v3($config);
+    //                 $version = 3;
+    //                 break;
+    //             default:
+    //                 $version = APTAIVE_SCHEMA_VERSION;
+    //                 break;
+    //         }
+    //     }
+    //
+    //     return $config;
+    // }
+    //
+    // function aptaive_migrate_v1_to_v2(array $config): array
+    // {
+    //     $config['schemaVersion'] = 2;
+    //     return $config;
+    // }
+    //
+    // function aptaive_migrate_v2_to_v3(array $config): array
+    // {
+    //     $config['schemaVersion'] = 3;
+    //     return $config;
+    // }
+    update_option(
+        APTAIVE_CONFIG_OPTION,
+        aptaive_normalize_config($config)
+    );
 }
 
-function aptaive_migrate_config(array $config, int $fromVersion): array
+function aptaive_normalize_config(array $config): array
 {
-    $version = $fromVersion;
+    $default = aptaive_default_config();
 
-    while ($version < APTAIVE_SCHEMA_VERSION) {
-        switch ($version) {
-            case 1:
-                $config = aptaive_migrate_v1_to_v2($config);
-                $version = 2;
-                break;
-            case 2:
-                $config = aptaive_migrate_v2_to_v3($config);
-                $version = 3;
-                break;
-        }
-    }
-
-    return $config;
-}
-
-function aptaive_migrate_v1_to_v2(array $old): array
-{
-    $config = $old;
-
-    //update schema
-    $config['schemaVersion'] = 2;
-
-    //đảm bảo app tồn tại
-    $config['app'] = $config['app'] ?? [];
-
-    //thêm field mới NẾU CHƯA CÓ
-    $config['app']['versionUpdate'] = $config['app']['versionUpdate'] ?? '';
-
-    $config['app']['download'] = array_merge(
-        [
-            'android' => '',
-            'ios'     => '',
-        ],
-        $config['app']['download'] ?? []
+    $config['pluginVersion'] = APTAIVE_PLUGIN_VERSION;
+    $config['schemaVersion'] = APTAIVE_SCHEMA_VERSION;
+    $config['minAppVersion'] = aptaive_normalize_version_string(
+        $config['minAppVersion'] ?? APTAIVE_MIN_APP_VERSION,
+        APTAIVE_MIN_APP_VERSION
+    );
+    $config['app'] = array_merge(
+        $default['app'],
+        is_array($config['app'] ?? null) ? $config['app'] : []
     );
 
-    //layouts giữ nguyên
-    $config['layouts'] = $config['layouts'] ?? [];
+    $config['app']['download'] = array_merge(
+        $default['app']['download'],
+        is_array($config['app']['download'] ?? null) ? $config['app']['download'] : []
+    );
+
+    $config['layouts'] = array_merge(
+        $default['layouts'],
+        is_array($config['layouts'] ?? null) ? $config['layouts'] : []
+    );
+
+    unset($config['app']['version'], $config['app']['versionUpdate'], $config['app']['minAppVersion']);
 
     return $config;
 }
 
-function aptaive_migrate_v2_to_v3(array $old): array
+function aptaive_normalize_version_string($value, string $fallback): string
 {
-    $config = $old;
+    if (!is_string($value)) {
+        return $fallback;
+    }
 
-    //update schema
-    $config['pluginVersion'] = '1.0.1';
-    $config['schemaVersion'] = 3;
+    $value = trim($value);
 
-    return $config;
+    if ($value === '') {
+        return $fallback;
+    }
+
+    if (!preg_match('/^\d+\.\d+\.\d+$/', $value)) {
+        return $fallback;
+    }
+
+    return $value;
 }
 
 function aptaive_default_config(): array
@@ -85,11 +115,10 @@ function aptaive_default_config(): array
     return [
         'pluginVersion' => APTAIVE_PLUGIN_VERSION,
         'schemaVersion' => APTAIVE_SCHEMA_VERSION,
+        'minAppVersion' => APTAIVE_MIN_APP_VERSION,
         'app' => [
             'appName' => '',
             'applicationId' => '',
-            'version' => '1.0.0',
-            'versionUpdate' => '',
             'download' => [
                 'ios' => '',
                 'android' => '',

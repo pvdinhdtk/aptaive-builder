@@ -180,6 +180,168 @@
     /* đúng chuẩn spacing WP */
 }
 
+.aptaive-build-panel {
+    position: relative;
+    overflow: hidden;
+    padding: 22px;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.32), transparent 34%),
+        linear-gradient(145deg, #0f3d31 0%, #185847 54%, #e3a72f 135%);
+    box-shadow: 0 18px 40px rgba(16, 42, 35, 0.18);
+    color: #fff7e8;
+}
+
+.aptaive-build-panel::after {
+    content: "";
+    position: absolute;
+    inset: auto -40px -60px auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    filter: blur(6px);
+}
+
+.aptaive-build-hero {
+    position: relative;
+    z-index: 1;
+}
+
+.aptaive-build-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255, 247, 232, 0.12);
+    color: #fff0cb;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.aptaive-build-hero h3 {
+    margin: 14px 0 8px;
+    color: #fff;
+    font-size: 28px;
+    line-height: 1.15;
+}
+
+.aptaive-build-hero p {
+    margin: 0;
+    color: rgba(255, 247, 232, 0.88);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.aptaive-build-steps {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.aptaive-build-step {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+}
+
+.aptaive-build-step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff6df;
+    font-size: 18px;
+    font-weight: 800;
+    min-height: 56px;
+}
+
+.aptaive-build-step-content strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #fff;
+    font-size: 14px;
+}
+
+.aptaive-build-step-content p {
+    margin: 0;
+    color: rgba(255, 247, 232, 0.84);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.aptaive-build-cta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #fff6de 0%, #f7cb67 100%);
+    color: #15392f;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 10px 24px rgba(24, 20, 12, 0.18);
+}
+
+.aptaive-build-cta:hover {
+    color: #15392f;
+    transform: translateY(-1px);
+}
+
+.aptaive-publish-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 960px;
+}
+
+.aptaive-publish-copy {
+    padding-top: 24px;
+}
+
+.aptaive-publish-kicker {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e7f5ef;
+    color: #0f6b52;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.aptaive-publish-copy h1 {
+    margin: 14px 0 10px;
+    color: #13231d;
+    font-size: 34px;
+    line-height: 1.15;
+}
+
+.aptaive-publish-copy p {
+    max-width: 680px;
+    margin: 0;
+    color: #4c5c55;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
 .components-card-body {
     display: flex;
     flex-direction: column;
@@ -259,6 +421,7 @@
 .aptaive-color-button:hover {
     background: #f6f7f7;
 }
+
 
 .aptaive-color-button-group:focus-within {
     border-color: #2271b1;

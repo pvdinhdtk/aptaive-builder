@@ -1,1 +1,4 @@
-<?php return array('dependencies' => array('react', 'react-dom', 'wp-api-fetch', 'wp-components', 'wp-data', 'wp-element', 'wp-media-utils', 'wp-notices', 'wp-primitives'), 'version' => '4ef0b57e03b08a06c9d7');
+<?php
+defined('ABSPATH') || exit;
+
+return array('dependencies' => array('react', 'react-dom', 'wp-api-fetch', 'wp-components', 'wp-data', 'wp-element', 'wp-media-utils', 'wp-notices', 'wp-primitives'), 'version' => '6f832d8889dae1dad9e0');

@@ -2,7 +2,17 @@
 set -e
 
 PLUGIN=aptaive-builder
-OUT="$HOME/Desktop/${PLUGIN}-release"
+VERSION=$(
+  sed -n 's/^Version:[[:space:]]*//p' "${PLUGIN}.php" | head -n 1
+)
+
+if [ -z "$VERSION" ]; then
+  echo "❌ Could not determine plugin version from ${PLUGIN}.php"
+  exit 1
+fi
+
+PACKAGE_NAME="${PLUGIN}-${VERSION}"
+OUT="$HOME/Desktop/${PACKAGE_NAME}-release"
 
 echo "📦 Building plugin to: $OUT"
 
@@ -11,11 +21,17 @@ mkdir -p "$OUT/$PLUGIN"
 
 rsync -av \
   --exclude='.git' \
+  --exclude='.github' \
+  --exclude='.vscode' \
+  --exclude='.gitignore' \
+  --exclude='.DS_Store' \
   --exclude='bin' \
   --exclude='stubs' \
   --exclude='vendor' \
   --exclude='node_modules' \
   --exclude='README-DEV.md' \
+  --exclude='README.md' \
+  --exclude='*.log' \
   --exclude='admin/dev' \
   --exclude='composer.*' \
   --exclude='phpstan*' \
@@ -23,7 +39,7 @@ rsync -av \
   "$OUT/$PLUGIN/"
 
 cd "$OUT"
-zip -r ${PLUGIN}.zip ${PLUGIN}
+zip -r "${PACKAGE_NAME}.zip" "${PLUGIN}"
 
 echo "✅ Done!"
-echo "➡️  File: $OUT/${PLUGIN}.zip"
+echo "➡️  File: $OUT/${PACKAGE_NAME}.zip"

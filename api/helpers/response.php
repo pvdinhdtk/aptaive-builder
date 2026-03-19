@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 function aptaive_response($data = [], $message = '', $status = 200)
 {

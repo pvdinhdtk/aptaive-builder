@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 function aptaive_refresh(WP_REST_Request $req)
 {

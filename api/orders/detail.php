@@ -203,7 +203,7 @@ function aptaive_get_order_detail(WP_REST_Request $request)
 
             $payment_instructions = [
                 'type'        => 'bacs',
-                'title'       => __('Thông tin chuyển khoản ngân hàng', 'woocommerce'),
+                'title'       => __('Thông tin chuyển khoản ngân hàng', 'aptaive-builder'),
                 'description' => wpautop(
                     wptexturize(get_option('woocommerce_bacs_description'))
                 ),

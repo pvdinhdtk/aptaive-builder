@@ -29,7 +29,11 @@ function aptaive_get_post_detail(WP_REST_Request $request)
         'title' => get_the_title($post),
         'slug'  => $post->post_name,
         'image' => $image,
-        'content' => apply_filters('the_content', $post->post_content),
+        'content' => apply_filters(
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress content filter.
+            'the_content',
+            $post->post_content
+        ),
         'date' => get_post_time('c', false, $post->ID),
     ]);
 }

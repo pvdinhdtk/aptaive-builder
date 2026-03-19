@@ -24,6 +24,7 @@ function aptaive_get_config()
         APTAIVE_CONFIG_OPTION,
         aptaive_default_config()
     );
+    $config = aptaive_normalize_config($config);
     return rest_ensure_response($config);
 }
 
@@ -31,13 +32,28 @@ function aptaive_save_config(WP_REST_Request $request)
 {
     $data = $request->get_json_params();
 
-    if (!$data) {
-        return new WP_Error('invalid_data', 'Invalid config', ['status' => 400]);
+    if (!$data || !is_array($data)) {
+        return new WP_Error(
+            'invalid_data',
+            __('Invalid config', 'aptaive-builder'),
+            ['status' => 400]
+        );
     }
 
-    update_option('aptaive_builder_config', $data, false);
+    $normalized = aptaive_normalize_config($data);
+
+    if (($data['minAppVersion'] ?? null) !== $normalized['minAppVersion']) {
+        return new WP_Error(
+            'invalid_min_app_version',
+            __('minAppVersion must be in x.y.z format', 'aptaive-builder'),
+            ['status' => 422]
+        );
+    }
+
+    update_option(APTAIVE_CONFIG_OPTION, $normalized, false);
 
     return [
         'success' => true,
+        'data' => $normalized,
     ];
 }

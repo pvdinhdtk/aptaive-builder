@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 class Aptaive_Auth_Exception extends Exception
 {

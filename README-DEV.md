@@ -1,23 +1,23 @@
 aptaive-builder/
 │
-├─ aptaive-builder.php        ← file plugin chính
+├─ aptaive-builder.php ← file plugin chính
 │
 ├─ admin/
-│  ├─ build/ 
-│  ├─ dev/                       ← ❌ CHỈ DEV (KHÔNG SHIP)
-│  │  └─ src.php
-│  │  └─ package.json
-│  │  └─ node_modules/
-│  ├─ enqueue.php
-│  ├─ menu.php
-│  │
+│ ├─ build/
+│ ├─ dev/ ← ❌ CHỈ DEV (KHÔNG SHIP)
+│ │ └─ src.php
+│ │ └─ package.json
+│ │ └─ node_modules/
+│ ├─ enqueue.php
+│ ├─ menu.php
+│ │
 ├─ api/
-│  ├─ config/
-│  │  └─ routes.php
-│  ├─ products/
-│  └─ posts/
+│ ├─ config/
+│ │ └─ routes.php
+│ ├─ products/
+│ └─ posts/
 ├─ config/
-│  ├─ constants.php
+│ ├─ constants.php
 └─ README.md
 
 php -d memory_limit=1G vendor/bin/phpstan analyse
@@ -32,3 +32,8 @@ Add this to your wp-config.php:
 
 ```php
 define('APTAIVE_JWT_SECRET', 'CHANGE_THIS_TO_A_RANDOM_SECRET');
+```
+
+//Xoá cấu hình
+DELETE FROM wp_options WHERE option_name = 'aptaive_builder_config';
+DELETE FROM wp_usermeta WHERE meta_key = 'aptaive_refresh_token';

@@ -4,6 +4,7 @@ import { store as noticesStore } from '@wordpress/notices';
 
 import AppLayouts from './pages/AppLayouts';
 import AppSettings from './pages/AppSettings';
+import PublishApp from './pages/PublishApp';
 
 export default function App() {
     const page = new URLSearchParams(window.location.search).get('page');
@@ -31,10 +32,10 @@ export default function App() {
                 />
             </div>
 
-            {page === 'aptaive-builder-layouts'
-                ? <AppLayouts />
-                : <AppSettings />
-            }
+            {page === 'aptaive-builder-layouts' && <AppLayouts />}
+            {page === 'aptaive-builder-publish' && <PublishApp />}
+            {page !== 'aptaive-builder-layouts' &&
+                page !== 'aptaive-builder-publish' && <AppSettings />}
         </>
     );
 }

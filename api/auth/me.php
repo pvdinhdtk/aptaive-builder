@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 function aptaive_me()
 {

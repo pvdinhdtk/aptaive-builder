@@ -4,8 +4,8 @@ defined('ABSPATH') || exit;
 add_action('admin_menu', function () {
 
     add_menu_page(
-        'Aptaive Builder',
-        'Aptaive Builder',
+        __('Aptaive Builder', 'aptaive-builder'),
+        __('Aptaive Builder', 'aptaive-builder'),
         'manage_options',
         'aptaive-builder',
         'aptaive_render_admin',
@@ -16,8 +16,8 @@ add_action('admin_menu', function () {
     // submenu mặc định → App Settings
     add_submenu_page(
         'aptaive-builder',
-        'App Settings',
-        'App Settings',
+        __('App Settings', 'aptaive-builder'),
+        __('App Settings', 'aptaive-builder'),
         'manage_options',
         'aptaive-builder',
         'aptaive_render_admin'
@@ -25,10 +25,19 @@ add_action('admin_menu', function () {
 
     add_submenu_page(
         'aptaive-builder',
-        'App Layouts',
-        'App Layouts',
+        __('App Layouts', 'aptaive-builder'),
+        __('App Layouts', 'aptaive-builder'),
         'manage_options',
         'aptaive-builder-layouts',
+        'aptaive_render_admin'
+    );
+
+    add_submenu_page(
+        'aptaive-builder',
+        __('Build App', 'aptaive-builder'),
+        __('Build App', 'aptaive-builder'),
+        'manage_options',
+        'aptaive-builder-publish',
         'aptaive_render_admin'
     );
 });

@@ -86,8 +86,6 @@ export type Layouts = {
 export type App = {
     appName: string;
     applicationId: string;
-    version: string;
-    versionUpdate: string;
     download: Download;
     logo: string;
     icon: string;
@@ -105,6 +103,8 @@ export type Download = {
 /* ================= ROOT CONFIG ================= */
 
 export type Config = {
+    schemaVersion: number;
+    minAppVersion: string;
     app: App;
     layouts: Layouts;
 };

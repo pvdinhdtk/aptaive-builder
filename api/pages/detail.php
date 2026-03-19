@@ -34,7 +34,11 @@ function aptaive_get_page_detail(WP_REST_Request $request)
         'title'   => get_the_title($page),
         'slug'    => $page->post_name,
         'image'   => $image,
-        'content' => apply_filters('the_content', $page->post_content),
+        'content' => apply_filters(
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress content filter.
+            'the_content',
+            $page->post_content
+        ),
         'date'    => get_post_time('c', false, $page->ID),
     ]);
 }

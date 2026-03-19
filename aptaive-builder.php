@@ -3,9 +3,14 @@
 Plugin Name: Aptaive Builder
 Plugin URI: https://app.taive.net
 Description: Build downloadable mobile apps from WordPress using configurable APIs and layouts.
-Version: 1.0.1
+Version: 1.0.0
+Requires at least: 6.0
+Requires PHP: 7.4
 Author: Aptaive
-Text Domain: aptaive
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: aptaive-builder
+Domain Path: /languages
 */
 
 defined('ABSPATH') || exit;
@@ -18,9 +23,18 @@ defined('ABSPATH') || exit;
 define('APTAIVE_PLUGIN_READY', defined('APTAIVE_JWT_SECRET'));
 if (!APTAIVE_PLUGIN_READY) {
     add_action('admin_notices', function () {
-        echo '<div class="notice notice-error"><p>
-            Please define <code>APTAIVE_JWT_SECRET</code> in wp-config.php
-        </p></div>';
+        printf(
+            '<div class="notice notice-error"><p>%s</p></div>',
+            wp_kses(
+                __(
+                    'Please define <code>APTAIVE_JWT_SECRET</code> in wp-config.php',
+                    'aptaive-builder'
+                ),
+                [
+                    'code' => [],
+                ]
+            )
+        );
     });
 }
 
@@ -86,6 +100,7 @@ require_once APTAIVE_BUILDER_PATH . 'api/auth/login.php';
 require_once APTAIVE_BUILDER_PATH . 'api/auth/register.php';
 require_once APTAIVE_BUILDER_PATH . 'api/auth/refresh.php';
 require_once APTAIVE_BUILDER_PATH . 'api/auth/me.php';
+require_once APTAIVE_BUILDER_PATH . 'api/auth/delete-account.php';
 require_once APTAIVE_BUILDER_PATH . 'api/auth/routes.php';
 
 /**

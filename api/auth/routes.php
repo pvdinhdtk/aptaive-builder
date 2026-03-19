@@ -1,4 +1,5 @@
 <?php
+defined('ABSPATH') || exit;
 
 add_action('rest_api_init', function () {
     register_rest_route('aptaive/v1/auth', '/login', [
@@ -22,6 +23,12 @@ add_action('rest_api_init', function () {
     register_rest_route('aptaive/v1/auth', '/me', [
         'methods'  => 'GET',
         'callback' => 'aptaive_me',
+        'permission_callback' => '__return_true',
+    ]);
+
+    register_rest_route('aptaive/v1/auth', '/account', [
+        'methods'  => 'DELETE',
+        'callback' => 'aptaive_delete_account',
         'permission_callback' => '__return_true',
     ]);
 });

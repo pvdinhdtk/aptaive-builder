@@ -1,8 +1,11 @@
 <?php
+defined('ABSPATH') || exit;
 
 function aptaive_auth_user(): WP_User
 {
-    $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    $header = isset($_SERVER['HTTP_AUTHORIZATION'])
+        ? sanitize_text_field(wp_unslash($_SERVER['HTTP_AUTHORIZATION']))
+        : '';
 
     if (!$header || stripos($header, 'Bearer ') !== 0) {
         throw new Aptaive_Auth_Exception(
