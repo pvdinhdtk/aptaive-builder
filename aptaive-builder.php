@@ -3,7 +3,7 @@
 Plugin Name: Aptaive Builder
 Plugin URI: https://app.taive.net
 Description: Build downloadable mobile apps from WordPress using configurable APIs and layouts.
-Version: 1.0.0
+Version: 1.0.1
 Author: Aptaive
 Text Domain: aptaive
 */

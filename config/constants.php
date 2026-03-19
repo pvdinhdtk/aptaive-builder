@@ -1,6 +1,7 @@
 <?php
 
-define('APTAIVE_SCHEMA_VERSION', 2);
+define('APTAIVE_PLUGIN_VERSION', '1.0.1');
+define('APTAIVE_SCHEMA_VERSION', 3);
 define('APTAIVE_CONFIG_OPTION', 'aptaive_builder_config');
 
 // 15 phút

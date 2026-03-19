@@ -32,6 +32,10 @@ function aptaive_migrate_config(array $config, int $fromVersion): array
                 $config = aptaive_migrate_v1_to_v2($config);
                 $version = 2;
                 break;
+            case 2:
+                $config = aptaive_migrate_v2_to_v3($config);
+                $version = 3;
+                break;
         }
     }
 
@@ -65,11 +69,22 @@ function aptaive_migrate_v1_to_v2(array $old): array
     return $config;
 }
 
+function aptaive_migrate_v2_to_v3(array $old): array
+{
+    $config = $old;
+
+    //update schema
+    $config['pluginVersion'] = '1.0.1';
+    $config['schemaVersion'] = 3;
+
+    return $config;
+}
+
 function aptaive_default_config(): array
 {
     return [
+        'pluginVersion' => APTAIVE_PLUGIN_VERSION,
         'schemaVersion' => APTAIVE_SCHEMA_VERSION,
-
         'app' => [
             'appName' => '',
             'applicationId' => '',
@@ -137,8 +152,8 @@ function aptaive_default_config(): array
                     ],
                     [
                         'label' => 'Bài viết',
-                        'icon' => 'post',
-                        'targetType' => 'post',
+                        'icon' => 'text',
+                        'targetType' => 'doc_text',
                         'targetId' => null,
                     ],
                     [

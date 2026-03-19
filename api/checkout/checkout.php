@@ -63,7 +63,9 @@ function aptaive_get_checkout_data()
                     'required'    => (bool) ($field['required'] ?? false),
                     'class'       => $field['class'] ?? [],
                     'priority'    => $field['priority'] ?? 0,
-                    'options'     => $field['options'] ?? null,
+                    'options' => is_array($field['options'] ?? null)
+                        ? $field['options']
+                        : null,
                     'placeholder' => $field['placeholder'] ?? '',
                 ];
             }

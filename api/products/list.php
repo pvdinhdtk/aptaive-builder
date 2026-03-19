@@ -95,7 +95,7 @@ function aptaive_get_products(WP_REST_Request $request)
             'image'        => wp_get_attachment_image_url(
                 $product->get_image_id(),
                 'medium'
-            ),
+            ) ?: null,
         ];
     }
 
