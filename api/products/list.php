@@ -3,7 +3,7 @@ defined('ABSPATH') || exit;
 
 function aptaive_get_products(WP_REST_Request $request)
 {
-    if (!class_exists('WooCommerce')) {
+    if (!class_exists('WooCommerce') || !function_exists('wc_get_products')) {
         return aptaive_response([], 'WooCommerce not installed', 400);
     }
 
@@ -48,41 +48,32 @@ function aptaive_get_products(WP_REST_Request $request)
      * Query args
      * ===================== */
     $args = [
-        'post_type'      => 'product',
-        'post_status'    => 'publish',
-        'posts_per_page' => $per_page,
-        'paged'          => $page,
-        's'              => $search,
-        'orderby'        => $orderby === 'price' ? 'meta_value_num' : $orderby,
-        'order'          => $order,
+        'status'   => 'publish',
+        'limit'    => $per_page,
+        'page'     => $page,
+        'paginate' => true,
+        'return'   => 'objects',
+        'orderby'  => $orderby,
+        'order'    => $order,
     ];
 
-    if ($orderby === 'price') {
-        $args['meta_key'] = '_price';
+    if ($search !== '') {
+        $args['search'] = $search;
     }
 
     if (!empty($categories)) {
-        $args['tax_query'] = [
-            [
-                'taxonomy' => 'product_cat',
-                'field'    => is_numeric($categories[0]) ? 'term_id' : 'slug',
-                'terms'    => $categories,
-                'operator' => 'IN',
-            ],
-        ];
+        $args['category'] = aptaive_resolve_product_category_slugs($categories);
     }
 
     /* =====================
      * Query
      * ===================== */
-    $query = new WP_Query($args);
+    $query = wc_get_products($args);
 
     $products = [];
 
-    foreach ($query->posts as $post) {
-        $product = wc_get_product($post->ID);
-        if (!$product) continue;
-
+    foreach ($query->products as $product) {
+        if (!$product instanceof WC_Product) continue;
         $price_data = aptaive_get_product_list_price($product);
 
         $products[] = [
@@ -105,11 +96,47 @@ function aptaive_get_products(WP_REST_Request $request)
     return aptaive_response([
         'page'      => $page,
         'perPage'   => $per_page,
-        'total'     => (int) $query->found_posts,
+        'total'     => (int) $query->total,
         'totalPage' => (int) $query->max_num_pages,
         'hasMore'   => $page < $query->max_num_pages,
         'products'  => $products,
     ]);
+}
+
+function aptaive_resolve_product_category_slugs(array $categories): array
+{
+    $slugs = [];
+    $term_ids = [];
+
+    foreach ($categories as $category) {
+        if (is_numeric($category)) {
+            $term_ids[] = (int) $category;
+            continue;
+        }
+
+        $slug = sanitize_title($category);
+        if ($slug !== '') {
+            $slugs[] = $slug;
+        }
+    }
+
+    if (!empty($term_ids)) {
+        $terms = get_terms([
+            'taxonomy'   => 'product_cat',
+            'hide_empty' => false,
+            'include'    => $term_ids,
+        ]);
+
+        if (!is_wp_error($terms)) {
+            foreach ($terms as $term) {
+                if ($term instanceof WP_Term && $term->slug !== '') {
+                    $slugs[] = $term->slug;
+                }
+            }
+        }
+    }
+
+    return array_values(array_unique($slugs));
 }
 
 

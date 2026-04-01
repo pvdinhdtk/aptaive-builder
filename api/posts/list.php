@@ -29,7 +29,7 @@ function aptaive_get_posts(WP_REST_Request $request)
     $categories     = [];
 
     if (!empty($category_param)) {
-        $categories = array_map('trim', explode(',', $category_param));
+        $categories = array_map('trim', explode(',', (string) $category_param));
     }
 
     // Query args
@@ -44,13 +44,11 @@ function aptaive_get_posts(WP_REST_Request $request)
     ];
 
     if (!empty($categories)) {
-        $args['tax_query'] = [
-            [
-                'taxonomy' => 'category',
-                'field'    => is_numeric($categories[0]) ? 'term_id' : 'slug',
-                'terms'    => $categories,
-            ],
-        ];
+        $category_ids = aptaive_resolve_post_category_ids($categories);
+
+        if (!empty($category_ids)) {
+            $args['category__in'] = $category_ids;
+        }
     }
 
     $query = new WP_Query($args);
@@ -76,4 +74,39 @@ function aptaive_get_posts(WP_REST_Request $request)
         'hasMore'   => $page < $query->max_num_pages,
         'posts'     => $posts,
     ]);
+}
+
+function aptaive_resolve_post_category_ids(array $categories): array
+{
+    $category_ids = [];
+    $slugs = [];
+
+    foreach ($categories as $category) {
+        if (is_numeric($category)) {
+            $category_ids[] = (int) $category;
+            continue;
+        }
+
+        $slug = sanitize_title($category);
+        if ($slug !== '') {
+            $slugs[] = $slug;
+        }
+    }
+
+    if (!empty($slugs)) {
+        $terms = get_terms([
+            'taxonomy'   => 'category',
+            'hide_empty' => false,
+            'slug'       => $slugs,
+            'fields'     => 'ids',
+        ]);
+
+        if (!is_wp_error($terms)) {
+            foreach ($terms as $term_id) {
+                $category_ids[] = (int) $term_id;
+            }
+        }
+    }
+
+    return array_values(array_unique(array_filter($category_ids)));
 }

@@ -11,6 +11,11 @@ function aptaive_login(WP_REST_Request $req)
     );
     $password = $p['password'] ?? '';
 
+    $rate_limit = aptaive_auth_rate_limit_check('login', $login);
+    if ($rate_limit instanceof WP_Error) {
+        return $rate_limit;
+    }
+
     // Nếu là email → tìm username
     if (is_email($login)) {
         $u = get_user_by('email', $login);
@@ -22,27 +27,16 @@ function aptaive_login(WP_REST_Request $req)
     $user = wp_authenticate($login, $password);
 
     if (is_wp_error($user)) {
-        $code = $user->get_error_code();
-
-        switch ($code) {
-            case 'empty_username':
-                $message = 'Vui lòng nhập tài khoản';
-                break;
-            case 'empty_password':
-                $message = 'Vui lòng nhập mật khẩu';
-                break;
-            case 'invalid_username':
-                $message = 'Tài khoản không tồn tại';
-                break;
-            case 'incorrect_password':
-                $message = 'Mật khẩu không chính xác';
-                break;
-            default:
-                $message = 'Sai tài khoản hoặc mật khẩu';
+        if (in_array($user->get_error_code(), ['empty_username', 'empty_password'], true)) {
+            return aptaive_response([], 'Vui lòng nhập tài khoản và mật khẩu', 422);
         }
 
-        return aptaive_response([], $message, 401);
+        aptaive_auth_rate_limit_hit('login', $login);
+
+        return aptaive_response([], 'Sai tài khoản hoặc mật khẩu', 401);
     }
+
+    aptaive_auth_rate_limit_clear('login', $login);
 
     $now = time();
 
@@ -52,12 +46,7 @@ function aptaive_login(WP_REST_Request $req)
         'exp' => $now + APTAIVE_ACCESS_TOKEN_TTL,
     ]);
 
-    $refreshToken = wp_generate_password(64, false);
-    update_user_meta(
-        $user->ID,
-        APTAIVE_REFRESH_META_KEY,
-        password_hash($refreshToken, PASSWORD_DEFAULT)
-    );
+    $refreshToken = aptaive_auth_issue_refresh_token($user->ID);
 
     return aptaive_response(
         [

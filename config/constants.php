@@ -13,3 +13,5 @@ define('APTAIVE_ACCESS_TOKEN_TTL', 15 * 60);
 define('APTAIVE_REFRESH_TOKEN_TTL', 30 * 24 * 60 * 60);
 
 define('APTAIVE_REFRESH_META_KEY', 'aptaive_refresh_token');
+define('APTAIVE_AUTH_RATE_LIMIT_WINDOW', 15 * 60);
+define('APTAIVE_AUTH_RATE_LIMIT_MAX_ATTEMPTS', 5);

@@ -2,7 +2,6 @@
 defined('ABSPATH') || exit;
 
 add_action('admin_menu', function () {
-
     add_menu_page(
         __('Aptaive Builder', 'aptaive-builder'),
         __('Aptaive Builder', 'aptaive-builder'),
@@ -10,10 +9,9 @@ add_action('admin_menu', function () {
         'aptaive-builder',
         'aptaive_render_admin',
         'dashicons-smartphone',
-        3
+        80
     );
 
-    // submenu mặc định → App Settings
     add_submenu_page(
         'aptaive-builder',
         __('App Settings', 'aptaive-builder'),

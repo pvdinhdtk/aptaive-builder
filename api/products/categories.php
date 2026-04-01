@@ -10,14 +10,28 @@ function aptaive_get_product_categories(WP_REST_Request $request)
     $terms = get_terms([
         'taxonomy'   => 'product_cat',
         'hide_empty' => false,
-        'meta_key'   => 'order',
-        'orderby'    => 'meta_value_num',
+        'orderby'    => 'name',
         'order'      => 'ASC',
     ]);
 
     if (is_wp_error($terms)) {
         return aptaive_response([], 'Failed to fetch categories', 500);
     }
+
+    usort($terms, function ($left, $right) {
+        if (!$left instanceof WP_Term || !$right instanceof WP_Term) {
+            return 0;
+        }
+
+        $left_order = (int) get_term_meta($left->term_id, 'order', true);
+        $right_order = (int) get_term_meta($right->term_id, 'order', true);
+
+        if ($left_order === $right_order) {
+            return strcasecmp($left->name, $right->name);
+        }
+
+        return $left_order <=> $right_order;
+    });
 
     $data = [];
 

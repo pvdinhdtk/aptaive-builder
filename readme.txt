@@ -1,5 +1,5 @@
 === Aptaive Builder ===
-Contributors: pvdinhdtk
+Contributors: LuckiDTK
 Tags: mobile app, app builder, wordpress api, woocommerce, headless
 Requires at least: 6.0
 Tested up to: 6.9
@@ -24,15 +24,15 @@ Features include:
 
 == External Services ==
 
-This plugin integrates with the Aptaive build platform at `https://app.taive.net/`.
+This plugin integrates with the Aptaive build platform at https://app.taive.net/.
 
 The external service is used only when a site administrator chooses to open the `Build App` area in the plugin and continues to the Aptaive platform to submit a mobile app build request.
 
 The plugin itself does not require the external service for local configuration such as app settings, layouts, or WordPress-side API setup. The service is only needed when requesting a build and receiving generated app files through the Aptaive platform.
 
-Service URL: `https://app.taive.net/`
-Terms of Service: `https://app.taive.net/terms`
-Privacy Policy: `https://app.taive.net/privacy-policy`
+Service URL: https://app.taive.net/
+Terms of Service: https://app.taive.net/terms
+Privacy Policy: https://app.taive.net/privacy-policy
 
 The plugin requires a JWT secret key in `wp-config.php`:
 
@@ -44,6 +44,23 @@ The plugin requires a JWT secret key in `wp-config.php`:
 2. Activate the plugin through the `Plugins` screen in WordPress.
 3. Add `define('APTAIVE_JWT_SECRET', 'CHANGE_THIS_SECRET_KEY');` to your `wp-config.php`.
 4. Open `Aptaive Builder` in wp-admin and configure your app.
+
+== Development ==
+
+This plugin includes generated admin JavaScript and CSS assets in `admin/build/`.
+
+Public source repository: https://github.com/pvdinhdtk/aptaive-builder
+
+Frontend source files are located in `admin/dev/src/`.
+Build configuration is located in `admin/dev/package.json`.
+
+To rebuild the admin assets:
+
+1. Change to the `admin/dev/` directory.
+2. Run `npm install`.
+3. Run `npm run build`.
+
+Node.js and Composer are only required for development and are not required on production sites.
 
 == Frequently Asked Questions ==
 

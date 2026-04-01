@@ -14,16 +14,35 @@ function aptaive_register(WP_REST_Request $req)
     $email    = sanitize_email($p['email'] ?? '');
     $password = $p['password'] ?? '';
 
+    $rate_limit = aptaive_auth_rate_limit_check('register', $email ?: $username);
+    if ($rate_limit instanceof WP_Error) {
+        return $rate_limit;
+    }
+
     // Validate
     if (!$username || !$email || !$password) {
         return aptaive_response([], 'Vui lòng nhập thông tin chính xác các trường', 422);
     }
 
+    if (!is_email($email)) {
+        aptaive_auth_rate_limit_hit('register', $email ?: $username);
+
+        return aptaive_response([], 'Email không hợp lệ', 422);
+    }
+
+    if (strlen($password) < 8) {
+        aptaive_auth_rate_limit_hit('register', $email ?: $username);
+
+        return aptaive_response([], 'Mật khẩu phải có ít nhất 8 ký tự', 422);
+    }
+
     if (username_exists($username)) {
+        aptaive_auth_rate_limit_hit('register', $email ?: $username);
         return aptaive_response([], 'Username đã tồn tại', 409);
     }
 
     if (email_exists($email)) {
+        aptaive_auth_rate_limit_hit('register', $email ?: $username);
         return aptaive_response([], 'Email đã được sử dụng', 409);
     }
 
@@ -31,8 +50,11 @@ function aptaive_register(WP_REST_Request $req)
     $user_id = wp_create_user($username, $password, $email);
 
     if (is_wp_error($user_id)) {
+        aptaive_auth_rate_limit_hit('register', $email ?: $username);
         return aptaive_response([], $user_id->get_error_message(), 400);
     }
+
+    aptaive_auth_rate_limit_clear('register', $email ?: $username);
 
     $user = get_user_by('id', $user_id);
 
@@ -45,12 +67,7 @@ function aptaive_register(WP_REST_Request $req)
         'exp' => $now + APTAIVE_ACCESS_TOKEN_TTL,
     ]);
 
-    $refreshToken = wp_generate_password(64, false);
-    update_user_meta(
-        $user->ID,
-        APTAIVE_REFRESH_META_KEY,
-        password_hash($refreshToken, PASSWORD_DEFAULT)
-    );
+    $refreshToken = aptaive_auth_issue_refresh_token($user->ID);
 
     // ✅ Response giống LOGIN
     return aptaive_response(

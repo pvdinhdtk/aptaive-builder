@@ -7,6 +7,9 @@ add_action('rest_api_init', function () {
         [
             'methods'  => 'GET',
             'callback' => 'aptaive_get_config',
+            'permission_callback' => function () {
+                return current_user_can('manage_options');
+            },
         ],
         [
             'methods'  => 'POST',

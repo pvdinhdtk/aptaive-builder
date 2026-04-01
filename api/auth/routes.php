@@ -11,7 +11,7 @@ add_action('rest_api_init', function () {
     register_rest_route('aptaive/v1/auth', '/register', [
         'methods'  => 'POST',
         'callback' => 'aptaive_register',
-        'permission_callback' => '__return_true',
+        'permission_callback' => 'aptaive_rest_can_register',
     ]);
 
     register_rest_route('aptaive/v1/auth', '/refresh', [
@@ -23,12 +23,12 @@ add_action('rest_api_init', function () {
     register_rest_route('aptaive/v1/auth', '/me', [
         'methods'  => 'GET',
         'callback' => 'aptaive_me',
-        'permission_callback' => '__return_true',
+        'permission_callback' => 'aptaive_rest_require_auth',
     ]);
 
     register_rest_route('aptaive/v1/auth', '/account', [
         'methods'  => 'DELETE',
         'callback' => 'aptaive_delete_account',
-        'permission_callback' => '__return_true',
+        'permission_callback' => 'aptaive_rest_require_auth',
     ]);
 });
