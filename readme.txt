@@ -1,5 +1,5 @@
 === Aptaive Builder ===
-Contributors: LuckiDTK
+Contributors: Aptaive
 Tags: mobile app, app builder, wordpress api, woocommerce, headless
 Requires at least: 6.0
 Tested up to: 6.9
